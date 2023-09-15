@@ -1,81 +1,93 @@
-const mongoose = require('mongoose'); // Erase if already required
-const bcrypt = require('bcrypt')
+const mongoose = require("mongoose"); // Erase if already required
+const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+const Schema = mongoose.Schema;
 // Declare the Schema of the Mongo model
-var userSchema = new mongoose.Schema({
-    firstname:{
-        type:String,
-        required:true,
-        index:true,
+const userSchema = Schema(
+  {
+    firstname: {
+      type: String,
+      required: true,
+      index: true,
     },
-    lastname:{
-        type:String,
-        required:true,
+    lastname: {
+      type: String,
+      required: true,
     },
-    email:{
-        type:String,
-        required:true,
-        unique:true,
+    email: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    mobile:{
-        type:String,
-        required:true,
-        unique:true,
+    mobile: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    password:{
-        type:String,
-        required:true,
+    password: {
+      type: String,
+      required: true,
     },
-    role:{
-        type:String,
-        default:'user',
+    role: {
+      type: String,
+      default: "user",
     },
-    cart:{
-        type: Array,
-        default:[],
+    cart: [{
+      product :{type : mongoose.Types.ObjectId,
+      ref : 'Product'},
+      quantity : Number,
+      color : String, 
+
+    }],
+    address: {
+      type: Array,
+      default : []
     },
-    address:[
-       { type: mongoose.Types.ObjectId, 
-        ref : 'Address'}
-    ],
-    wishlist:[
-        { type: mongoose.Types.ObjectId, 
-        ref : 'Product'}
-    ],
-    isBlocked:{
-        type: Boolean,
-        default: false,
+    wishlist: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+    isBlocked: {
+      type: Boolean,
+      default: false,
     },
-    refreshToken:{
-        type: String,
+    refreshToken: {
+      type: String,
     },
-    passwordChangeAt:{
-        type: String,
+    passwordChangeAt: {
+      type: String,
     },
     passwordResetToken: {
-        type: String,
+      type: String,
     },
     passwordResetExpires: {
-        type: String,
-    }
-}, {
-    timestamps: true
+      type: String,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+  const salt = bcrypt.genSaltSync(10);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
-
-userSchema.pre('save', async function(next){
-    if(!this.isModified('password')){
-        next()
-    }
-    const salt =bcrypt.genSaltSync(10)
-    this.password = await bcrypt.hash(this.password , salt)
-});
-
-
-//kiểm tra passwork
+//kiểm tra password
 userSchema.methods = {
-    isCorrectPassword : async function (password) {
-        return await bcrypt.compare(password, this.password)
-    }
+  isCorrectPassword: async function (password) {
+    return await bcrypt.compare(password, this.password);
+  },
+  createPasswordChangeToken: function () {
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    this.passwordResetToken = crypto
+      .createHash("sha256") 
+      .update(resetToken)
+      .digest("hex");
+    this.passwordResetExpires = Date.now() + 15 * 60 * 1000;
+    return resetToken
+  },
 };
 // Export the model
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);
