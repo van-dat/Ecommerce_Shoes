@@ -9,7 +9,7 @@ import { memo } from "react";
 const BannerCategory = () => {
   const navigate = useNavigate();
   return (
-    <div className="md:container md:mx-auto py-10 laptop:flex gap-8  bg-header">
+    <div className="md:container md:mx-auto py-10 laptop:flex gap-8">
       <div className="w-full flex  relative justify-center">
         <img src={adidas} alt="img" className="object-contain rounded-2xl cursor-pointer" onClick={()=>navigate(Path.ADIDAS)} />
         <div  className="absolute bottom-8  flex  ">

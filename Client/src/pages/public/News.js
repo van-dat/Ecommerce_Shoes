@@ -4,10 +4,9 @@ import { BoxNew } from "../../components";
 
 const News = () => {
   const { blog } = useSelector((state) => state.app);
-  console.log(blog);
 
   return (
-    <div className="container mx-auto flex flex-col mt-[165px]">
+    <div className="md:container mx-auto flex flex-col mt-[165px]">
       <div className="h-[60px]"></div>
       <span className="text-5xl font-bold py-4">Tin Tức</span>
       <div>

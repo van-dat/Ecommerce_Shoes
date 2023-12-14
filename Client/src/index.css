@@ -4,6 +4,9 @@
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&family=Quicksand:wght@300;400;500;600;700&display=swap");
+
+
+        
 body {
   margin: 0;
   font-family: "Quicksand", sans-serif;
@@ -16,6 +19,7 @@ code {
 }
 button.slick-next {
   right: 80px;
+  box-shadow: #464646;
 }
 button.slick-next::before {
   content: "\276F";
@@ -25,13 +29,15 @@ button.slick-next::before {
   border-radius: 50%;
 }
 button.slick-prev {
-  right: 80px;
+  left: 35px;
+  z-index: 10;
+  box-shadow: #464646;
 }
 button.slick-prev::before {
-  content: "\276F";
+  content: "\276E";
   padding: 20px 25px;
   background-color: rgba(117, 115, 115, 0.2);
-  color: #464646;
+  color: white;
   border-radius: 50%;
 }
 
@@ -43,7 +49,7 @@ button.slick-prev::before {
 
 ::-webkit-scrollbar-thumb {
   background-color: #ddd;
-  border: 2px solid transparent;
+  border: 2px solid #741212;
   border-radius: 100rem;
   height: 10px;
 }
@@ -118,6 +124,10 @@ ul.slick-dots {
   position: relative;
   bottom: 0;
 }
+
+/*  */
+
+
 
 
 

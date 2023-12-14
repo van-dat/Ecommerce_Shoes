@@ -4,7 +4,8 @@ import { Product, Button } from "../components/";
 import { useSelector } from "react-redux";
 const ProductCategory = ({ name }) => {
   const { dataNike , dataAdidas, dataMlb } = useSelector((state) => state.app);
-  const data = name === 'Giày Nike' ? dataNike : name === "Giày Adidas" ? dataAdidas : dataMlb 
+  const data = name == 'Giày Nike' ? dataNike : name == "Giày Adidas" ? dataAdidas : dataMlb 
+  console.log(data)
   return (
     <>
       {data && data.length > 0 && (

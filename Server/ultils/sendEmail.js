@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const asyncHandler = require("express-async-handler");
 
-const sendEmail = asyncHandler(async ({email, html}) => {
+const sendEmail = asyncHandler(async ({ email, html, subject }) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -13,13 +13,13 @@ const sendEmail = asyncHandler(async ({email, html}) => {
     },
   });
   // async..await is not allowed in global scope, must use a wrapper
-    // send mail with defined transport object
-    const info = await transporter.sendMail({
-      from: '"Shoes store" <no_reply@shoes.com>', // sender address
-      to: email , // list of receivers
-      subject: "forgot Password", // Subject line
-      html: html, // html body
-    });
+  // send mail with defined transport object
+  const info = await transporter.sendMail({
+    from: '"Shoes store" <no_reply@shoes.com>', // sender address
+    to: email, // list of receivers
+    subject, // Subject line
+    html, // html body
+  });
 });
 
 module.exports = sendEmail;

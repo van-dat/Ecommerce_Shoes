@@ -9,23 +9,30 @@ require('dotenv').config()
 const cors = require('cors')
 
 // main().catch(err => console.log(err));
+db.connect()
 
 const app = express()
 app.use(cors({
     origin : process.env.CLIENT_URL,
-    methods : ['POST', 'GET', 'PUT', 'DELETE']
+    methods : ['POST', 'GET', 'PUT', 'DELETE'],
+    credentials: true
 }))
 const port = process.env.PORT || 8888
-db.connect()
+// const hostname = '192.168.10.135';
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(cookieParser())
 initRouter(app)
 
 app.listen(port, () => {
+    // console.log(`server running on the port http://${hostname}:${port}`)
     console.log(`server running on the port http://localhost:${port}`)
 })
 
+
+// app.listen(port, hostname, () => {
+//     console.log(`server running on the port http://${hostname}:${port}`)
+// })
 // async function main() {
 //     const dbConnect = await mongoose.connect('mongodb://127.0.0.1:27017/shoes_db',
 //         {useNewUrlParser: true, 

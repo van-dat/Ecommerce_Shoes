@@ -14,7 +14,6 @@ const createOrder = asyncHandler(async (req, res) => {
     product: i.product._id,
     price: i.product.price,
     quantity: i.quantity,
-    color: i.color,
   }));
   let total = userCart.cart.reduce((sum, e) => e.product.price * e.quantity + sum, 0);
   const createData = {products, total, orderBy: _id}

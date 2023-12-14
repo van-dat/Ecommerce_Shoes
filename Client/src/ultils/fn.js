@@ -14,16 +14,22 @@ export const date = (date) => {
   return formattedTime;
 };
 export const year = (date) => {
-   var date = new Date(date);
-   var year = date.getUTCFullYear(); // Lấy  năm
-   return year;
- };
- export const random = (max) => {
-    return Math.floor(Math.random() * max);
+  var date = new Date(date);
+  var year = date.getUTCFullYear(); // Lấy  năm
+  return year;
+};
+export const random = (max) => {
+  return Math.floor(Math.random() * max);
 };
 export const fncut = (text) => {
   return text.split('-')[1]
 };
 export const fnPercent = (number) => {
-  return Math.round(number/ 5000000 *100)
+  return Math.round(number / 5000000 * 100)
 };
+export const fnCheckMail = (email) => {
+  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const result = emailPattern.test(email)
+  return result;
+}
+

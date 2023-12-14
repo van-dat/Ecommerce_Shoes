@@ -1,5 +1,5 @@
 import { Search, Login } from "./";
-import logo from "../assets/img/logo.png";
+import logo from "../assets/img/GroupWhite.svg";
 import { menu } from "../ultils/menu";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -20,9 +20,9 @@ const Header = () => {
     fetchDataCategory()
   }, []);
   return (
-    <div className="border-b-2 flex flex-col text-main">
-      <div className="border-b-2">
-        <div className="md:container md:mx-auto  h-[40px] flex justify-between items-center px-4">
+    <div className="border-b flex flex-col text-white bg-black">
+      <div className="border-b">
+        <div className="md:container md:mx-auto h-[40px] flex justify-between items-center px-4">
           <span className="">Hotline:</span>
           <div className="flex items-center gap-8">
             <Search />
@@ -31,17 +31,17 @@ const Header = () => {
         </div>
       </div>
       <div className="">
-        <div className="md:container md:mx-auto  h-header px-4 flex">
-          <div className="w-1/5 h-full flex justify-start items-center cursor-pointer">
-            <img src={logo} alt="logo" className="scale-150 w-[150px] object-contain " onClick={()=>Navigate(Path.PUBLIC)} />
+        <div className="md:container md:mx-auto  h-header px-4 flex items-center justify-between">
+          <div className="w-auto h-full flex justify-start items-center cursor-pointer">
+            <img src={logo} alt="logo" className=" text-white w-[90px]  object-contain z-40 drop-shadow-md " onClick={()=>Navigate('/')} />
           </div>
-          <div className="w-auto flex items-center gap-4 ">
+          {/* <div className="w-auto flex items-center gap-4 "> */}
             {menu.map((i) => (
               <NavLink key={i.index} to={i.path} className={({ isActive }) => (isActive ? isActiveType : noActiveType)}>
                 <span className="uppercase p-0 m-0">{i.text}</span>
               </NavLink>
             ))}
-          </div>
+          {/* </div> */}
         </div>
       </div>
     </div>

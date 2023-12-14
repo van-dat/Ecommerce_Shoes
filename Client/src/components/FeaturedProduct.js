@@ -34,7 +34,7 @@ const FeaturedProduct = ({ text, detail }) => {
     fetchDataProduct();
   }, [defaultData]);
   return (
-    <div className="flex py-8 flex-col text-[#333] gap-6 ">
+    <div className="flex py-8 flex-col text-[#333] gap-6 bg-white ">
       <div className="relative flex justify-center items-center w-full">
         <div className="flex relative">
           <div className="before:content-[''] w-[80px] h-[2px] bg-[#333] absolute top-1/2 left-[-110px]  "></div>

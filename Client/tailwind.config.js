@@ -28,6 +28,9 @@ module.exports = {
         header: "#f2f2f2",
         main: "#de0000",
         "main-100": "#de101d",
+        content: "rgba(245,245,245,1)",
+        hover: "rgba(0,0,0,0.7)",
+        user: "rgba(255,255,255,0.3)"
       },
       screens: {
         1600: "1600px",
@@ -59,10 +62,38 @@ module.exports = {
             transform: "scale(1.2)",
           },
         },
+        "zoom-img": {
+          "0%": {
+            "-webkit-transform": "scale(1)",
+            transform: "scale(1)",
+          },
+          "100%": {
+            "-webkit-transform": "scale(1.2)",
+            transform: "scale(1.2)",
+          },
+        },
+        "user": {
+          "0%": {
+            "-webkit-transform": "scale(0)",
+            transform: "scale(0)",
+            opacity: 1
+          },
+          "100%": {
+            "-webkit-transform": "scale(1)",
+            transform: "scale(1)",
+            opacity: 1
+          }
+        }
+
+
+
+        // 
+
       },
       animation: {
         "slide-top": "slide-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;",
         "zoom-img": "zoom-img 0.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) NaNs infinite both",
+        "user" : "user 1s cubic-bezier(.25,.46,.45,.94) both;animation:scale-in-center .5s cubic-bezier(.25,.46,.45,.94) both"
       },
       flex: {
         6: "6 6 0%",
@@ -71,10 +102,11 @@ module.exports = {
         7: "7 7 0%",
         3: "3 3 0%",
         2: "2 2 0%",
+        8: "8 8 0%",
       },
     },
     container: {
-      padding: "8rem",
+      padding: "4rem",
     },
   },
   plugins: [require("@tailwindcss/line-clamp")],

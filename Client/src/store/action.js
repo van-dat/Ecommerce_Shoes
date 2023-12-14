@@ -31,3 +31,15 @@ export const getOneBlog = createAsyncThunk("Blog/oneBlog", async (bid, rejectWit
   if(!response.status)return rejectWithValue(response)
   return response.rs
 });
+export const getSize = createAsyncThunk("Size", async (data, rejectWithValue) => {
+  const response = await apis.apiSize();
+  if(!response.success)return rejectWithValue(response)
+  return response.rs
+});
+
+export const getCurrentUser = createAsyncThunk("/current", async (data, rejectWithValue) => {
+  const response = await apis.apiCurrentUser();
+  if(!response.success)return rejectWithValue(response)
+  return response.rs
+});
+

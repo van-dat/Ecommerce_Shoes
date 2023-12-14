@@ -106,7 +106,7 @@ const updateProduct = asyncHandler(async (req, res) => {
   const updateProduct = await Product.findByIdAndUpdate(pid, req.body, { new: true });
   return res.status(200).json({
     success: updateProduct ? true : false,
-    product: updateProduct ? updateProduct : "cannot get product",
+    product: updateProduct ? updateProduct : "cannot update product",
   });
 });
 // addSize

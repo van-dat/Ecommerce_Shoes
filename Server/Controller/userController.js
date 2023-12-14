@@ -4,26 +4,67 @@ const sendEmail = require("../ultils/sendEmail");
 const crypto = require("crypto");
 const { generateAccessToken, generateRefreshToken } = require("../middlewares/jwt");
 const { verify } = require("jsonwebtoken");
-const { hashSync } = require("bcrypt");
 
 const register = asyncHandler(async (req, res) => {
-  const { email, password, lastname, firstname } = req.body;
+  const { email, password, lastname, firstname, mobile } = req.body;
   if (!email || !password || !lastname || !firstname) {
     return res.status(400).json({
       success: false,
       mes: "error",
     });
   }
-  const dataUser = await User.findOne({ email });
-  if (dataUser) throw new Error("Tài khoản đã tồn tại");
-  else {
-    const newUser = await User.create(req.body);
-    return res.status(200).json({
-      success: newUser ? true : false,
-      mes: newUser ? "Tạo tài khoản thành công vui lòng đăng nhập " : "tạo tài khoản thất bại",
-    });
+  const emailUser = await User.findOne({ email });
+  if (emailUser) throw new Error("Tài khoản đã tồn tại");
+  const sdtUser = await User.findOne({ mobile });
+  if (sdtUser) throw new Error("Tài khoản đã tồn tại");
+
+  // token
+
+  const randomBytes = crypto.randomBytes(2);
+  const randomValue = randomBytes.readUInt16BE(0);
+  const token = randomValue % 90000 + 1000;
+  const newEmail = btoa(email) + '@' + token
+
+  const newUser = await User.create({
+    email: newEmail, password, lastname, firstname, mobile
+  })
+
+
+  setTimeout(async () => {
+    await User.deleteOne({ email: newEmail })
+  }, [5 * 60 * 1000])
+  if (newUser) {
+    const html = `<h2>Register code</h2> <br/>  <blockquote>${token}</blockquote>`
+    const data = {
+      email,
+      html,
+      subject: 'Confirm Account Shoes'
+    };
+    await sendEmail(data);
   }
+  return res.status(200).json({
+    success: newUser ? true : false,
+    mes: newUser ? "please check you email to active account !" : "some went wrong , please try later",
+  });
+
+
 });
+
+const createAccount = asyncHandler(async (req, res) => {
+  const { token } = req.params
+  const response = await User.findOne({ email: new RegExp(`${token}$`) })
+  if (response) {
+    response.email = atob(response.email.split('@')[0])
+    response.save()
+  }
+  return res.json({
+    result: response ? true : false,
+    data: response ? response : 'wrong false'
+  })
+
+
+})
+
 
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -33,7 +74,7 @@ const login = asyncHandler(async (req, res) => {
       mes: "Missing inputs",
     });
   // plain object
-  const response = await User.findOne({ email });
+  const response = await User.findOne({ email })
   if (response && (await response.isCorrectPassword(password))) {
     // Tách password và role ra khỏi response
     const { password, role, refreshToken, ...userData } = response.toObject();
@@ -42,17 +83,20 @@ const login = asyncHandler(async (req, res) => {
     // Tạo refresh token
     const newRefreshToken = generateRefreshToken(response._id);
     // Lưu refresh token vào database
-    await User.findByIdAndUpdate(response._id, { refreshToken: newRefreshToken }, { new: true });
+    const result = await User.findByIdAndUpdate(response._id, { refreshToken: newRefreshToken }, { new: true }).populate({
+      path: 'cart.product',
+      model: 'Product'
+    }).select('firstname lastname email mobile cart');
     // Lưu refresh token vào cookie
     res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
       // hết hạn
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 3 * 24 * 60 * 60 * 1000,
     });
     return res.status(200).json({
       success: true,
       accessToken,
-      userData,
+      result,
     });
   } else {
     throw new Error("Invalid credentials!");
@@ -61,7 +105,10 @@ const login = asyncHandler(async (req, res) => {
 
 const getCurrent = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const dataUser = await User.findById({ _id }).select("-password -refreshToken -role");
+  const dataUser = await User.findById({ _id }).populate({
+    path: 'cart.product',
+    model: 'Product'
+  }).select("-password -refreshToken -role");
   return res.status(200).json({
     success: true,
     rs: dataUser ? dataUser : "không tìm thấy",
@@ -143,28 +190,28 @@ const logout = asyncHandler(async (req, res, next) => {
     mes: "logout success and remove refreshToken",
   });
 });
-// forgotpassword
+// forgot-password
 const forgotPassword = asyncHandler(async (req, res) => {
-  const { email } = req.query;
+  const { email } = req.body;
   if (!email) throw new Error("missing email");
   const userData = await User.findOne({ email });
   if (!userData) throw new Error("user not found");
   const resetToken = userData.createPasswordChangeToken();
   await userData.save();
-
   const html = `xin vui lòng click link dưới đây để thay đổi mật khẩu của bạn . 
   link sẽ hết hạn sau 15 phút kể từ bây giờ, 
-  <a href =${process.env.URL_SERVER}/api/user/reset-password/${resetToken} 
+  <a href =${process.env.CLIENT_URL}/reset-password/${resetToken} 
   >Click here</a>`;
 
   const data = {
     email,
     html,
+    subject: 'Forgot Password'
   };
   const rs = await sendEmail(data);
   return res.status(200).json({
     success: true,
-    mes: rs,
+    mes: 'please check you email to password retrieval !'
   });
 });
 
@@ -186,50 +233,129 @@ const resetPassword = asyncHandler(async (req, res) => {
 
   return res.status(200).json({
     success: userData ? true : false,
-    msg: userData ? "success password " : "error resetpassword",
+    msg: userData ? "Thay đổi tài khoản thành công" : "Thay đổi tài khoản thất bại vui lòng thử lại",
   });
 });
 // add CardProduct
 const updateCartProduct = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const { pid, color, quantity } = req.body;
-  if (!pid || !color || !quantity) throw new Error("missing input");
+  const { pid, size, quantity } = req.body;
+  if (!pid || !size || !quantity) throw new Error("missing input");
   const user = await User.findById(_id).select("cart");
-  const alreadyCart = user?.cart?.find((e) => e.product.toString() === pid);
-  if (alreadyCart) {
-    if (alreadyCart.color === color) {
-      const response = await User.updateOne(
-        { cart: { $elemMatch: alreadyCart } },
-        { $inc: { "cart.$.quantity": quantity  } },
-        { new: true }
-      );
+  const alreadyCart = user?.cart?.find((e) => e.product.toString() == pid);
+  if (alreadyCart != null) {
+    const allSize = user?.cart?.filter(e => e.size == size)
+
+    if (allSize.length > 0) {
       return res.status(200).json({
-        status: response ? true : false,
-        rs: response ? response : "can not add cart",
-      });
-    } else {
+        status: true,
+        mes: "Sản phẩm đã có trong giỏ hàng",
+      })
+    }
+    else {
       const response = await User.findByIdAndUpdate(
         _id,
-        { $push: { cart: { product: pid, quantity, color } } },
+        { $push: { cart: { product: pid, quantity, size } } },
         { new: true }
       );
       return res.status(200).json({
         status: response ? true : false,
-        rs: response ? response : "can not add cart",
+        mes: response ? 'Sản phẩm đã được thêm vào giỏ hàng' : "Không thể Thêm vào giỏ hàng",
       });
     }
   } else {
     const response = await User.findByIdAndUpdate(
       _id,
-      { $push: { cart: { product: pid, quantity, color } } },
+      { $push: { cart: { product: pid, quantity, size } } },
       { new: true }
     );
     return res.status(200).json({
       status: response ? true : false,
-      rs: response ? response : "can not add cart",
+      mes: response ? 'Sản phẩm đã được thêm vào giỏ hàng' : "Không thể Thêm vào giỏ hàng",
     });
   }
 });
+
+
+const updateQuantityCart = asyncHandler(async (req, res) => {
+  const { id, action } = req.body;
+  const { _id } = req.user;
+
+  try {
+    const user = await User.findById(_id);
+
+    // Find the item in the cart
+    const updateQuantityItem = user.cart.find((item) => item._id.toString() === id.toString());
+
+    if (!updateQuantityItem) {
+      return res.status(404).json({
+        result: 'error',
+        message: 'Item not found in the cart',
+      });
+    }
+
+    if (action == 0) {
+      updateQuantityItem.quantity += 1;
+
+      await user.save();
+
+      return res.json({
+        result: 'ok',
+        data: 1,
+      });
+    } else {
+      if (updateQuantityItem.quantity <= 1) {
+        updateQuantityItem.quantity = 1
+        await user.save();
+
+        return res.json({
+          result: 'ok',
+          data: 1,
+        });
+      } else {
+        updateQuantityItem.quantity -= 1
+        await user.save();
+
+        return res.json({
+          result: 'ok',
+          data: 1,
+        });
+      }
+    }
+    // Handle other actions (e.g., decrease, remove) here if needed
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      result: 'error',
+      message: 'Internal server error',
+    });
+  }
+});
+
+
+
+const removeItemCart = asyncHandler(async (req, res) => {
+  const { _id } = req.user
+  const { id } = req.body
+
+  const user = await User.findById(_id).select('cart')
+  const alreadyCart = user.cart.find(e => e._id == id)
+  if (!alreadyCart) {
+    return res.status(200).json({
+      result: false,
+      mes: 'not find Product in cart'
+    })
+  }
+
+  const response = await User.findByIdAndUpdate(_id, { $pull: { cart: { _id: id } } }, { new: true });
+
+  return res.status(200).json({
+    result : response ? true : false,
+    data : 1
+  })
+
+})
 
 module.exports = {
   register,
@@ -244,4 +370,7 @@ module.exports = {
   updateUser,
   updateUserAddress,
   updateCartProduct,
+  createAccount,
+  updateQuantityCart,
+  removeItemCart
 };

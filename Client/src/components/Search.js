@@ -5,7 +5,7 @@ const { IoCloseOutline, BiSearch } = icons;
 
 const Search = () => {
   return (
-    <div className="w-w-search bg-[#ffffff1a] border-2 border-main rounded-[20px] items-center flex h-7 text-[#363636] font-medium relative">
+    <div className="w-w-search bg-white border-2 border-main rounded-[20px] items-center flex h-7 text-[#363636] font-medium relative">
       <div className="absolute right-3 cursor-pointer hidden">
         <IoCloseOutline size={20} />
       </div>

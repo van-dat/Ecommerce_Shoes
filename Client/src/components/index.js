@@ -11,6 +11,11 @@ export { default as News } from "./News";
 export { default as BoxNew } from "./BoxNew";
 export { default as NavBarLeft } from "./NavBarLeft";
 export { default as Model } from "./Model";
+export {default as BreadCrumb } from "./BreadCrumb";
+export {default as SelectDetail } from "./SelectDetail";
+
+
+
 
 
 

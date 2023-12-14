@@ -36,7 +36,7 @@ const userSchema = Schema(
       product :{type : mongoose.Types.ObjectId,
       ref : 'Product'},
       quantity : Number,
-      color : String, 
+      size : [], 
 
     }],
     address: {
