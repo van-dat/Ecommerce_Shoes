@@ -12,7 +12,11 @@ instance.interceptors.request.use(
       const token = JSON.parse(localStorageData.token)
       config.headers = { Authorization: `Bearer ${token}` }
       return config
-    } else return config;
+    } else{
+      return config;
+    }
+
+    
   },
   function (error) {
     // Do something with request error

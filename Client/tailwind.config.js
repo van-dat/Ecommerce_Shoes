@@ -30,7 +30,8 @@ module.exports = {
         "main-100": "#de101d",
         content: "rgba(245,245,245,1)",
         hover: "rgba(0,0,0,0.7)",
-        user: "rgba(255,255,255,0.3)"
+        user: "rgba(255,255,255,0.3)",
+        graydark: '#333A48'
       },
       screens: {
         1600: "1600px",

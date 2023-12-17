@@ -29,7 +29,7 @@ export const totalPrice = (user, product) => {
     const data = user?.cart?.filter(e => product.some(el => el === e._id))
     let total = 0; // Initialize total to 0
 
-    if (data.length > 0) {
+    if (data && data?.length > 0) {
         for (const e of data) {
             const cash = e.product?.price;
             const quantity = e.quantity

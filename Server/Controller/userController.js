@@ -108,7 +108,8 @@ const getCurrent = asyncHandler(async (req, res) => {
   const dataUser = await User.findById({ _id }).populate({
     path: 'cart.product',
     model: 'Product'
-  }).select("-password -refreshToken -role");
+  }).select("-password -refreshToken");
+  console.log(dataUser)
   return res.status(200).json({
     success: true,
     rs: dataUser ? dataUser : "không tìm thấy",

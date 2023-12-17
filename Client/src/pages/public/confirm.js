@@ -70,7 +70,7 @@ const Confirm = () => {
 
 
     if(enteredOTP) {
-      if(enteredOTP.length > 4) {
+      if(enteredOTP?.length > 4) {
         if (enteredOTP) {
           const response = await apis.apiConfirm(enteredOTP)
           if(response.result){

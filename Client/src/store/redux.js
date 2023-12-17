@@ -22,7 +22,7 @@ const persistConfig = {
 const authPersist = {
   key: 'auth',
   storage,
-  whitelist: ['user', 'token', 'sendMail']
+  whitelist: ['user', 'token', 'sendMail','isLogin']
 }
 
 const rootReducer = combineReducers({

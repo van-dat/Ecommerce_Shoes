@@ -28,7 +28,7 @@ const Product = ({ data, css }) => {
   };
   return (
     <>
-      {data && data.length > 0 &&
+      {data && data?.length > 0 &&
 
         <div
           className={

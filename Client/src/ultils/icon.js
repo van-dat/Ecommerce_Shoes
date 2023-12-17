@@ -19,6 +19,11 @@ import { TiArrowSortedUp } from "react-icons/ti";
 import { TiShoppingCart } from "react-icons/ti";
 import { PiShoppingCartThin } from "react-icons/pi";
 import { MdOutlineDelete } from "react-icons/md";
+import { PiList } from "react-icons/pi";
+import { HiArrowNarrowLeft } from "react-icons/hi";
+import { BsFillTrashFill } from "react-icons/bs";
+import { HiOutlinePencilSquare } from "react-icons/hi2";
+
 
  const icons = {
     IoCloseOutline,
@@ -45,7 +50,11 @@ import { MdOutlineDelete } from "react-icons/md";
     TiArrowSortedUp,
     TiShoppingCart,
     PiShoppingCartThin,
-    MdOutlineDelete
+    MdOutlineDelete,
+    PiList,
+    HiArrowNarrowLeft,
+    BsFillTrashFill,
+    HiOutlinePencilSquare
     
 
 

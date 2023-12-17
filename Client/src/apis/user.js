@@ -62,3 +62,9 @@ export const apiRemoveItemCart = (data) => axios(
     data
     
 })
+export const apiGetAllUser = () => axios(
+    {
+    url :'user',
+    method : 'get'
+    
+})

@@ -9,7 +9,6 @@ import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { loginUser, sendMail } from "../../store/Slice/authSlice";
 import { checkNull } from '../../ultils/_helper'
-import {getCurrentUser} from '../../store/action'
 
 
 
@@ -17,11 +16,6 @@ const { FaFacebook, FcGoogle, TbArrowBackUp } = icons;
 const Login = ({ register, forgot }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [checkMail, setCheckMail] = useState(0);
-  const [checkPass, setCheckPass] = useState(0);
-  const [checkFirName, setCheckFirName] = useState(0);
-  const [checkLasName, setCheckLasName] = useState(0);
-  const [checkSdt, setCheckSdt] = useState(0);
   const initState = {
     firstname: "",
     lastname: "",

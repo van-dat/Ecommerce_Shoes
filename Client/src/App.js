@@ -33,7 +33,6 @@ function App() {
             <Route path={Path.DETAILS} element={<DetailsProduct />} />
             <Route path={Path.RESET_PASS} element={<ResetPass />} />
             <Route path={Path.CART} element={<Cart />} />
-
           </Route>
           <Route path={Path.CONFIRM} element={<Confirm />} />
 

@@ -27,7 +27,7 @@ const Details = () => {
   useEffect(() => {
     fetchCategory()
     if (banner && banner.length > 0) {
-      setrandomNumber(random(banner.length));
+      setrandomNumber(random(banner?.length));
     }
   }, [title]);
   const handleChangeOption = (e) => {

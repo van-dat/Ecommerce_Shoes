@@ -32,7 +32,7 @@ const getBlogs = asyncHandler(async (req, res) => {
 // updateBlog
 const updateBlog = asyncHandler(async (req, res) => {
   const { bid } = req.params;
-  if (Object.keys(req.body).length === 0) throw new Error("missing input");
+  if (Object.keys(req.body)?.length === 0) throw new Error("missing input");
   const response = await Blog.findByIdAndUpdate(bid, req.body, { new: true });
   return res.status(200).json({
     status: response ? true : false,

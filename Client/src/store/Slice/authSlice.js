@@ -9,13 +9,13 @@ const authSlice = createSlice({
         isLogin : false,
         sendMail : null,
         user:null,
-        token:null
+        token:null,
+        mes:null
 
     },
     reducers: {
         loginUser:(state, action) =>{
-            state.isLogin = action.payload?.success
-            state.user = action.payload?.result
+            state.isLogin = true
             state.token = action.payload?.accessToken
         },
         sendMail:(state, action) => {
@@ -30,16 +30,14 @@ const authSlice = createSlice({
     },
     extraReducers: (builder) => {
         // Bắt đầu thực hiện action login (Promise pending)
-        builder.addCase(actions.getCurrentUser.pending , (state) => {
-          state.isLoading = true;
-        });
         builder.addCase(actions.getCurrentUser.fulfilled, (state, action) => {
-          state.isLoading = false;
+          state.isLogin = true;
           state.user = action.payload;
         });
         builder.addCase(actions.getCurrentUser.rejected, (state, action) => {
-          state.isLoading = false;
+          state.isLogin = false;
           state.user = null;
+          state.mes = 'Phiên bản đăng nhập đã hết hạn vui lòng đăng nhập lại !!!'
         });
     }
 })

@@ -34,12 +34,12 @@ const Login = () => {
     if (response.success) {
       dispatch(logOut())
       setShowUser(false)
-      navigate(Path.HOME)
+      navigate(Path.PUBLIC)
     }
   }
 
 
-
+ 
   const handleRemove = async (e) => {
     const response = await apis.apiRemoveItemCart({ id: e })
     if (response.result == true) {
