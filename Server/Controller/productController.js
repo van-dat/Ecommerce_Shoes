@@ -2,7 +2,16 @@ const Product = require("../Model/product");
 const asyncHandler = require("express-async-handler");
 
 const createProduct = asyncHandler(async (req, res) => {
-  if (Object.keys(req.body).length === 0) throw new Error("missing input");
+console.log(req.body)
+console.log(req.files)
+  const {title, price, category, quantity, description} = req.body
+  const thumbnail = req.files?.thumbnail[0]?.path
+  const image = req.files.image?.map(el=> el.path)
+  if (!(title && price && category && quantity && description)) throw new Error("missing input");
+
+  if(thumbnail)req.body.thumbnail = thumbnail
+  if(thumbnail)req.body.image = image
+
   const newProduct = await Product.create(req.body);
   return res.status(200).json({
     success: newProduct ? true : false,

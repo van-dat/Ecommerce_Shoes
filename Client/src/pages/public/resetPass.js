@@ -29,8 +29,9 @@ const ResetPass = () => {
         }
 
         const response = await apis.apiResetPass({ password, token })
+        console.log(response)
         if (response.success == true) {
-            toast.success(response.mes)
+            toast.success(response.msg)
             navigate(Path.LOGIN)
             setPayLoad(initState)
         }

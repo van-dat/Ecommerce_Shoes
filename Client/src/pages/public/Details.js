@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { random } from "../../ultils/fn";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Product, NavBarLeft, BreadCrumb } from "../../components";
+import { Product, NavBarLeft, BreadCrumb, Pagination } from "../../components";
 import { getProduct } from "../../store/action";
 import { fncut } from "../../ultils/fn";
 import * as apis from "../../apis";
@@ -12,28 +12,16 @@ const Details = () => {
   const Dispatch = useDispatch();
   const { title } = useParams();
   const [Category, setCategory] = useState();
-  const [randomNumber, setrandomNumber] = useState(2);
-  const [oneProduct, setOneProduct] = useState();
-
-
-
-  const fetchCategory = async () => {
-    const response = await apis.apiCategory();
-    if (response.status) setCategory(response.rs)
-    const rs = response.rs?.find(i => i.slug == fncut(title))
-    setOneProduct(rs?.title)
-
-  };
-  useEffect(() => {
-    fetchCategory()
-    if (banner && banner.length > 0) {
-      setrandomNumber(random(banner?.length));
-    }
-  }, [title]);
+  const [page, setPage] = useState();
   const handleChangeOption = (e) => {
     let selectElement = document.getElementById("option").value;
-    Dispatch(getProduct({ sort: selectElement, title: fncut(title) }));
+    Dispatch(getProduct({ sort: selectElement, title: title, page : page }));
   };
+
+  useEffect(() => {
+    Dispatch(getProduct({ title: title, page : page }));
+  }, [page]);
+
 
   return (
     <div className="flex flex-col bg-white mt-[165px] ">
@@ -42,14 +30,14 @@ const Details = () => {
       </div>
       <div className="md:container md:mx-auto flex mt-2 gap-6">
         <div className="flex-1 ">
-          <NavBarLeft title={title} />
+          <NavBarLeft />
         </div>
         <div className="flex-3">
           <div className="flex flex-col  ">
-            <h3 className="font-bold text-2xl px-2">{Category?.filter(e => e.slug === title).title}</h3>
+            {/* <h3 className="font-bold text-2xl px-2">{Category?.filter(e => e.slug === title).title}</h3> */}
             <div className="flex justify-end p-4 items-center gap-3 text-md font-normal">
               <span>
-                Hiển thị {product.counts} trong {product.counts} Kết quả
+                Hiển thị {product?.product?.length} trong {product.counts} Kết quả
               </span>
               <select
                 id="option"
@@ -67,6 +55,10 @@ const Details = () => {
             </div>
           </div>
           <Product data={product?.product} css />
+          <div className="flex justify-center w-full mt-6">
+            <Pagination totalPage = {product.counts}
+            setPage = {setPage}/>
+          </div>
         </div>
       </div>
     </div>

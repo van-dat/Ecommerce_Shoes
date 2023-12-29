@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 import { Home, Login, Details, Public, News, Contact, DetailsProduct, Confirm, ResetPass, Cart } from "./pages/public";
 import Path from "./ultils/path";
-import { getBanner, getBlog, getOneBlog, getProduct } from "./store/action";
+import { getBanner, getBlog, getCategory, getOneBlog, getProduct } from "./store/action";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import { AdminLayout, DashBoard, ManageOrder, ManageProduct, ManageUser } from "./pages/admin";
+import { AdminLayout, CreateProduct, DashBoard, ManageOrder, ManageProduct, ManageUser } from "./pages/admin";
 import { MemberLayout, Personal } from "./pages/member";
 
 function App() {
@@ -14,6 +14,7 @@ function App() {
     dispatch(getBanner());
     dispatch(getProduct());
     dispatch(getBlog());
+    dispatch(getCategory())
   }, []);
   return (
     <>
@@ -43,6 +44,8 @@ function App() {
             <Route path={Path.MANAGE_USER} element={<ManageUser />} />
             <Route path={Path.MANAGE_PRODUCT} element={<ManageProduct />} />
             <Route path={Path.MANAGE_ORDER} element={<ManageOrder />} />
+            <Route path={Path.CREATE_PRODUCT} element={<CreateProduct />} />
+
           </Route>
           {/* member */}
           <Route path={Path.MEMBER} element={<MemberLayout />} >

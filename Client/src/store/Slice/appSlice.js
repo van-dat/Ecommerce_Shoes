@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as actions from "../action"
+
+
 export const appSlice = createSlice({
   name: "app",
   initialState: {
@@ -13,7 +15,8 @@ export const appSlice = createSlice({
     dataNike: [],
     dataMlb: [],
     dataAdidas: [],
-    isLoading: false
+    isLoading: false,
+    search: null
   },
   reducers: {
     // Logout không gọi API mà chỉ đơn giản là cập nhật state
@@ -32,6 +35,9 @@ export const appSlice = createSlice({
     dataMlb: (state, action) => {
       state.dataMlb = action.payload
     },
+    search: (state, action) => {
+      state.search = action.payload
+    }
   },
   extraReducers: (builder) => {
     // Bắt đầu thực hiện action login (Promise pending)
@@ -112,10 +118,26 @@ export const appSlice = createSlice({
       state.errorMessage = null;
     });
 
+    // category
+
+    builder.addCase(actions.getCategory.pending, (state) => {
+      state.isLoading = true;
+    });
+
+    builder.addCase(actions.getCategory.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.category = action.payload
+    });
+
+    builder.addCase(actions.getCategory.rejected, (state, action) => {
+      state.isLoading = false;
+      state.errorMessage = null;
+    });
+
 
 
   },
 });
-export const { noShow, Show, dataNike, dataAdidas, dataMlb } = appSlice.actions
+export const { noShow, Show, dataNike, dataAdidas, dataMlb, search } = appSlice.actions
 
 export default appSlice.reducer

@@ -31,5 +31,16 @@ export const apiSize = () => axios({
     url : '/size',
     method : 'get'
 })
+export const apiCreateProduct = (data) => axios({
+    url : '/product/',
+    method : 'post',
+    data
+})
+// export const apiGetsProduct = (params) => axios({
+//     url : `/product/${params}`,
+//     method : 'get'
+   
+// })
+
 
 

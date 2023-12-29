@@ -10,6 +10,7 @@ const Path = {
     NIKE: 'giay-nike',
     ADIDAS: 'giay-adidas',
     MLB: 'giay-mlb',
+    CATEGORY:'/:category',
     PHUKIEN: 'phu-kien',
     TINTUC: 'tin-tuc',
     LIENHE: 'lien-he',
@@ -23,7 +24,8 @@ const Path = {
     MANAGE_PRODUCT:'manage-product',
     MANAGE_USER:'manage-user',
     MEMBER:'member',
-    PERSONAL:'personal'
+    PERSONAL:'personal',
+    CREATE_PRODUCT:'create-product'
 
 
 

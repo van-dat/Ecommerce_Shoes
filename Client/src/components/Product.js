@@ -33,8 +33,8 @@ const Product = ({ data, css }) => {
         <div
           className={
             css
-              ? "flex  w-full flex-wrap justify-items-center gap-3  "
-              : "md:container md:mx-auto flex  w-full flex-wrap gap-4 "
+              ? "grid grid-cols-3  w-full flex-wrap justify-items-center gap-3  "
+              : " md:container grid grid-cols-4 md:mx-auto  w-full flex-wrap gap-4 "
           }
         >
           {data?.map((i, index) => (
@@ -42,20 +42,20 @@ const Product = ({ data, css }) => {
               key={index}
               className={
                 css
-                  ? "w-[32%] flex relative flex-wrap group hover:shadow-md"
-                  : "w-[48%] 950:w-[23%] flex shadow-md relative flex-wrap group"
+                  ? "w-full flex relative flex-wrap group shadow-md hover:shadow-md"
+                  : " w-full flex shadow-md relative  flex-wrap group"
               }
             >
-              <div className="p-2 w-full ">
-                <div className="w-full overflow-hidden h-[245px] bg-top">
+              <div className="  w-full ">
+                <div className="w-full overflow-hidden">
                   <img
                     src={i?.thumbnail[0]}
                     alt="thumbnail"
-                    className="w-full bg-bottom  object-contain  scale-100 hover:scale-110 ease-in-out duration-2000  cursor-pointer"
+                    className="w-full object-center  hover:scale-110 ease-in-out duration-2000  cursor-pointer"
                     onClick={() => handleClickNext(i._id, i.category.slug, i.slug)}
                   />
                 </div>
-                <div className="flex flex-col gap-3 capitalize font-medium pt-5 cursor-default">
+                <div className="flex flex-col z-40 gap-3 capitalize font-medium cursor-default">
                   <span className="text-sm  px-2 line-clamp-2">{i?.title}</span>
                   <span className="text-sm px-2">{fnPrice(i?.price)} ₫</span>
                 </div>

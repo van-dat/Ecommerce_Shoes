@@ -5,14 +5,22 @@ import { menu } from "../ultils/menu";
 import { fnPercent, fnPrice, fncut } from "../ultils/fn";
 import { getProduct } from "../store/action";
 import * as apis from "../apis";
+import { useDispatch, useSelector } from "react-redux";
 
-import { useDispatch } from "react-redux";
 
-const maxCost = 5000000;
+
+
+const maxCost = 10000000;
 const { HiMinus, HiMiniPlus } = icons;
 const active = "flex items-center gap-3 px-4 text-main-300 py-1 ";
 const noActive = "flex items-center gap-3 px-4  py-1 hover:text-main-300 ";
-const NavBarLeft = ({ title }) => {
+
+
+
+const NavBarLeft = () => {
+  const {title} = useParams()
+
+  const { category } = useSelector(state => state.app)
   const Dispatch = useDispatch();
   const [isHidden, setisHidden] = useState(true);
   const [isHiddenSize, setisHiddenSize] = useState(true);
@@ -38,10 +46,14 @@ const NavBarLeft = ({ title }) => {
   useEffect(() => {
     const costMin = +percent1 < +percent2 ? percent1 : percent2;
     const costMax = +percent1 < +percent2 ? percent2 : percent1;
-    Dispatch(getProduct({ title: fncut(title), "price[lte]": costMax, "price[gt]": costMin }));
+    Dispatch(getProduct({ title: title, "price[lte]": costMax, "price[gt]": costMin }));
   }, [percent1, percent2, title]);
+
+
+  
   useEffect(() => {
     fetchDataSize();
+    Dispatch(getProduct({ title: title }));
   }, []);
 
 
@@ -55,7 +67,7 @@ const NavBarLeft = ({ title }) => {
       setSelectedValues(selectedValues.filter((val) => val !== value));
     }
   }
-  
+
   return (
     <div className="flex cursor-pointer flex-col font-bold text-lg text-white">
       <div
@@ -73,29 +85,28 @@ const NavBarLeft = ({ title }) => {
           </span>
         )}
       </div>
+
+
       {isHidden && (
         <div className="flex flex-col text-main font-medium bg-header  ">
-          {menu
-            ?.filter((i) => i.text !== "tin tức" && i.text !== "liên hệ")
-            .map((i) => (
-              <NavLink to={i.path} className={({ isActive }) => (isActive ? active : noActive)} key={i.index}>
-                {({ isActive }) => (
-                  <>
-                    <div
-                      className={`before:content-[''] w-[15px] h-[15px] rounded-sm relative border-[1px]   ${
-                        isActive ? "border-main-300" : "border-main"
+          {category.map((i) => (
+            <NavLink to={`/${i.slug}`} className={({ isActive }) => (isActive ? active : noActive)} key={i._id}>
+              {({ isActive }) => (
+                <>
+                  <div
+                    className={`before:content-[''] w-[15px] h-[15px] rounded-sm relative border-[1px]   ${isActive ? "border-main-300" : "border-main"
                       }`}
-                    >
-                      {isActive ? (
-                        <div className="before:content-['\2713'] absolute text-xs right-[2px] text-main-200"></div>
-                      ) : null}
-                    </div>
+                  >
+                    {isActive ? (
+                      <div className="before:content-['\2713'] absolute text-xs right-[2px] text-main-200"></div>
+                    ) : null}
+                  </div>
 
-                    <p className="capitalize">{i.text}</p>
-                  </>
-                )}
-              </NavLink>
-            ))}
+                  <p className="capitalize">{i.title}</p>
+                </>
+              )}
+            </NavLink>
+          ))}
         </div>
       )}
 
@@ -110,7 +121,7 @@ const NavBarLeft = ({ title }) => {
           ></div>
           <input
             type="range"
-            step={1}
+            step={100}
             min={0}
             max={maxCost}
             value={percent1}
@@ -119,7 +130,7 @@ const NavBarLeft = ({ title }) => {
           />
           <input
             type="range"
-            step={1}
+            step={10}
             min={0}
             max={maxCost}
             value={percent2}
@@ -154,7 +165,7 @@ const NavBarLeft = ({ title }) => {
           <div className=" px-4  h-[200px] overflow-y-auto">
             {Size?.map((i, index) => (
               <div key={index} className=" py-1 gap-3 flex   items-center group">
-                <input onChange={(e)=>handleChangeSize(e, i._id)}
+                <input onChange={(e) => handleChangeSize(e, i._id)}
                   type="checkbox"
                   value={i._id}
                   id={i.size}

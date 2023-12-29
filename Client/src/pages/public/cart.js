@@ -87,7 +87,7 @@ const Cart = () => {
     return (
         <div className='mt-[165px] md:container '>
             <BreadCrumb />
-            <div class="flex pb-4">
+            <div className="flex pb-4">
                 <div className="flex flex-8 flex-col gap-4 pr-2 ">
                     <div className='bg-white flex flex-col p-4 w-full gap-2'>
                         <h5 className='capitalize text-xl font-semibold'>

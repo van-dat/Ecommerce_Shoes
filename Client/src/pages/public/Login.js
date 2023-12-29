@@ -126,9 +126,7 @@ const Login = ({ register, forgot }) => {
                     onChange={(e) => setPayLoad((prev) => ({ ...prev, firstname: e.target.value }))}
                     className="border-1 border  w-full h-9 px-4 outline-none rounded-md"
                   />
-                  <span className="text-xs text-main-100 italic">
-                    {checkFirName == 1 ? "Bạn chưa nhập First Name" : ""}
-                  </span>
+                
                 </div>
                 <div className="flex-1">
                   <span className="py-2 text-sm">Last Name</span>

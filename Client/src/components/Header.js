@@ -25,7 +25,6 @@ const Header = () => {
   }, []);
 
 
- 
 
   return (
     <div className="border-b flex flex-col text-white bg-black">
@@ -44,9 +43,9 @@ const Header = () => {
             <img src={logo} alt="logo" className=" text-white w-[90px]  object-contain z-40 drop-shadow-md " onClick={() => Navigate('/')} />
           </div>
           {/* <div className="w-auto flex items-center gap-4 "> */}
-          {menu.map((i) => (
-            <NavLink key={i.index} to={i.path} className={({ isActive }) => (isActive ? isActiveType : noActiveType)}>
-              <span className="uppercase p-0 m-0">{i.text}</span>
+          {dataCategory?.map((i) => (
+            <NavLink key={i._id} to={i.slug} className={({ isActive }) => (isActive ? isActiveType : noActiveType)}>
+              <span className="uppercase p-0 m-0">{i.title}</span>
             </NavLink>
           ))}
           {/* </div> */}

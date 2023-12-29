@@ -18,7 +18,8 @@ const {
   MdKeyboardArrowRight,
   TiArrowSortedUp,
   PiShoppingCartThin,
-  MdOutlineDelete
+  MdOutlineDelete,
+  RiAdminLine
 } = icons;
 const Login = () => {
 
@@ -39,7 +40,7 @@ const Login = () => {
   }
 
 
- 
+
   const handleRemove = async (e) => {
     const response = await apis.apiRemoveItemCart({ id: e })
     if (response.result == true) {
@@ -77,6 +78,7 @@ const Login = () => {
           <span className="cursor-pointer" onClick={() => navigate(Path.REGISTER)}>Đăng Ký</span>
         </>}
       {user && <span className="cursor-pointer capitalize select-none " onClick={() => { setShowUser((prev) => !prev) }}>{`${user?.firstname} ${user?.lastname}`}</span>}
+
       {/*userLogout  */}
       {showUser &&
         <div className="absolute top-10  select-none w-[250px] rounded-md right-0 bg-white text-main animate-user shadow-md"  >
@@ -125,7 +127,7 @@ const Login = () => {
       }
 
 
-      {user &&
+      {user?.role == 'user' &&
         <div className="  px-3  text-white group select-none">
           <span className="cursor-pointer" onClick={() => { navigate(Path.CART) }}>
             <TiShoppingCart color="white" size={28} />
@@ -208,6 +210,17 @@ const Login = () => {
 
           </div>
         </div>}
+
+
+      {
+        user?.role == 'admin' &&
+        <div onClick={() => { navigate(Path.ADMIN) }} className="  px-3 flex items-center justify-center gap-2 text-white group select-none">
+          <span className="cursor-pointer" >
+            <RiAdminLine color="white" size={23} />
+          </span>
+          <h6 className="m-0">Profile</h6>
+        </div>
+      }
 
 
 

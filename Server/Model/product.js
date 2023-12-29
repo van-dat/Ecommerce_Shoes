@@ -36,10 +36,7 @@ const productSchema = new mongoose.Schema(
     image: {
       type: Array,
     },
-    color: {
-      type: String,
-      enum: ["black, white, green"],
-    },
+   
     size: [
       {
         type: mongoose.Types.ObjectId,

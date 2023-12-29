@@ -5,21 +5,20 @@ import SidebarLinkGroup from './SidebarLinkGroup';
 import icons from '../../../ultils/icon';
 import Path from '../../../ultils/path'
 
-const {PiList, HiArrowNarrowLeft} = icons
+const { PiList, HiArrowNarrowLeft } = icons
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
   const { pathname } = location;
-
   const sidebar = useRef(null);
-
- 
+  const [isActive, setIsActive] = useState(false);
+  const [isProduct, setIsProduct] = useState(false);
 
   // close on click outside
- 
+
 
   // close if the esc key is pressed
   useEffect(() => {
-    const keyHandler = ( keyCode ) => {
+    const keyHandler = (keyCode) => {
       if (!sidebarOpen || keyCode !== 27) return;
       setSidebarOpen(false);
     };
@@ -27,32 +26,36 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     return () => document.removeEventListener('keydown', keyHandler);
   });
 
- 
+  console.log(sidebarOpen)
 
 
 
 
-  
+
 
   return (
     <aside
       ref={sidebar}
-      className={`absolute z-50 text-white left-0 top-0   flex h-screen w-72.5 flex-col overflow-y-hidden bg-[#24303F] duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      className={`absolute z-50  text-white left-0 top-0   flex h-screen w-72.5 flex-col overflow-y-hidden bg-[#24303F] duration-300 ease-linear dark:bg-boxdark   ${sidebarOpen ? 'translate-x-0 lg:static' : '-translate-x-full '
         }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex text-black items-center justify-between gap-2 px-6">
-        <NavLink className='mt-4 pl-2' to="/">
-          <img src={Logo} alt="Logo"  className='w-[50px] h-[50px] object-contain'/>
+        <NavLink className='mt-4 pl-2 flex items-end' to="/">
+          <img src={Logo} alt="Logo" className='w-[50px] h-[50px] object-contain' />
+          <h3 className='text-white text-end font-bold text-2xl '>Shoes</h3>
         </NavLink>
 
         <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="block lg:hidden"
+          onClick={() => {
+            setSidebarOpen(!sidebarOpen)
+            console.log('object')
+          }}
+          className="block"
         >
-         <div className='text-[#ddd] mt-4' >
-         <HiArrowNarrowLeft size={23}/>
-         </div>
+          <div className='text-[#ddd] mt-4' >
+            <HiArrowNarrowLeft size={23} />
+          </div>
         </button>
       </div>
       {/* <!-- SIDEBAR HEADER --> */}
@@ -78,12 +81,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     <React.Fragment>
                       <NavLink
                         to="#"
-                        className={`group relative flex items-center bg-graydark
-                         gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname ===  Path.ADMIN ||
+                        className={`group relative flex items-center
+                         gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === Path.ADMIN ||
                             pathname.includes('dashboard')) &&
                           'bg-graydark dark:bg-meta-4'
                           }`}
-                        
+
                       >
                         <svg
                           className="fill-current"
@@ -111,8 +114,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                           />
                         </svg>
                         Dashboard
-                        <svg
-                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && 'rotate-180'
+                        <svg onClick={() => setIsActive(!isActive)}
+                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${isActive && 'rotate-180'
                             }`}
                           width="20"
                           height="20"
@@ -130,7 +133,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                       </NavLink>
                       {/* <!-- Dropdown Menu Start --> */}
                       <div
-                        className={`translate transform overflow-hidden ${!open && 'hidden'
+                        className={`translate transform overflow-hidden ${!isActive && 'hidden'
                           }`}
                       >
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
@@ -221,12 +224,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                       <NavLink
                         to="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === '/forms' ||
-                            pathname.includes('forms')) &&
+                          pathname.includes('forms')) &&
                           'bg-graydark dark:bg-meta-4'
                           }`}
-                        // onClick={(e) => {
-                         
-                        // }}
                       >
                         <svg
                           className="fill-current"
@@ -257,9 +257,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                             fill="white"
                           />
                         </svg>
-                        Forms
+                        Product
                         <svg
-                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && 'rotate-180'
+                          onClick={() => setIsProduct(!isProduct)}
+                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${isProduct && 'rotate-180'
                             }`}
                           width="20"
                           height="20"
@@ -275,32 +276,35 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                           />
                         </svg>
                       </NavLink>
+
+
+
                       {/* <!-- Dropdown Menu Start --> */}
                       <div
-                        className={`translate transform overflow-hidden ${!open && 'hidden'
+                        className={`translate transform overflow-hidden ${!isProduct && 'hidden'
                           }`}
                       >
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                           <li>
                             <NavLink
-                              to="/forms/form-elements"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
+                              to={Path.CREATE_PRODUCT}
+                              className={`group relative hover:bg-graydark flex items-center gap-2 rounded-ms px-4 py-2 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${(pathname === Path.ADMICREATE_PRODUCTN ||
+                                pathname.includes('admin/create-product')) &&
+                              'bg-graydark dark:bg-meta-4'
+                              }`}
                             >
-                              Form Elements
+                              Create Product
                             </NavLink>
                           </li>
                           <li>
                             <NavLink
-                              to="/forms/form-layout"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
+                              to={Path.MANAGE_PRODUCT}
+                              className={`group relative hover:bg-graydark flex items-center gap-2 rounded-ms px-4 py-2 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${(pathname === Path.ADMICREATE_PRODUCTN ||
+                                pathname.includes('admin/manage-product')) &&
+                              'bg-graydark dark:bg-meta-4'
+                              }`}
                             >
-                              Form Layout
+                              ManageProduct
                             </NavLink>
                           </li>
                         </ul>
@@ -316,7 +320,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               <li>
                 <NavLink
                   to={`${Path.MANAGE_USER}`}
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('tables') && 'bg-graydark dark:bg-meta-4'
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('admin/manage-user') && 'bg-graydark dark:bg-meta-4'
                     }`}
                 >
                   <svg
@@ -453,9 +457,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === '/ui' || pathname.includes('ui')) &&
                           'bg-graydark dark:bg-meta-4'
                           }`}
-                        // onClick={(e) => {
-                          
-                        // }}
+                      // onClick={(e) => {
+
+                      // }}
                       >
                         <svg
                           className="fill-current"
@@ -559,7 +563,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === '/auth' || pathname.includes('auth')) &&
                           'bg-graydark dark:bg-meta-4'
                           }`}
-                        
+
                       >
                         <svg
                           className="fill-current"

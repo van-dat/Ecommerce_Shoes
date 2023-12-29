@@ -109,7 +109,6 @@ const getCurrent = asyncHandler(async (req, res) => {
     path: 'cart.product',
     model: 'Product'
   }).select("-password -refreshToken");
-  console.log(dataUser)
   return res.status(200).json({
     success: true,
     rs: dataUser ? dataUser : "không tìm thấy",
@@ -118,19 +117,57 @@ const getCurrent = asyncHandler(async (req, res) => {
 
 //getall user
 const getUsers = asyncHandler(async (req, res) => {
-  const response = await User.find().select("-password -refreshToken -role");
-  return res.status(200).json({
-    success: response ? true : false,
-    user: response,
-  });
+  const queryObj = { ...req.query };
+  //   tách các trường đặc biệt ra khỏi query
+  const excludedFields = ["page", "sort", "limit", "fields"];
+  excludedFields.forEach((el) => delete queryObj[el]);
+  //   format cho các operate cho đúng mongooes
+  let queryString = JSON.stringify(queryObj);
+  queryString = queryString.replace(/\b(gte|gt|lte|lt)\b/g, (el) => `$${el}`);
+  const formateQueries = JSON.parse(queryString);
+
+  if (queryObj?.name)
+    formateQueries.name = { $regex: queryObj.name, $options: "i" };
+  if (req.query.q) {
+    delete formateQueries.q;
+    formateQueries["$or"] = [
+      { firstname: { $regex: req.query.q, $options: "i" } },
+      { lastname: { $regex: req.query.q, $options: "i" } },
+      { email: { $regex: req.query.q, $options: "i" } },
+    ];
+  }
+  let queryCommand = User.find(formateQueries);
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(",").join("");
+    queryCommand = queryCommand.sort(sortBy);
+  }
+  if (req.query.fields) {
+    const fields = req.query.fields.split(",").join("");
+    queryCommand = queryCommand.select(fields);
+  }
+  const page = +req.query.page || 1;
+  const limit = +req.query.limit || process.env.LIMIT_USER;
+  const skip = (page - 1) * limit;
+  queryCommand.skip(skip).limit(limit);
+  try {
+    const response = await queryCommand;
+    const counts = await User.find(formateQueries).countDocuments();
+    return res.status(200).json({
+      success: response ? true : false,
+      products: response ? response : "Cannot get users",
+      counts,
+    });
+  } catch (err) {
+    throw new Error(err.message);
+  }
 });
 const deleteUser = asyncHandler(async (req, res) => {
-  const { _id } = req.query;
-  if (!_id) throw new Error("missing input !!!");
-  const response = await User.findByIdAndDelete({ _id });
+  const { uid } = req.params;
+  if (!uid) throw new Error("missing input !!!");
+  const response = await User.findByIdAndDelete({ _id: uid });
   return res.status(200).json({
     success: response ? true : false,
-    deleteUser: response ? response : "some thing went wrong",
+    mes: response ? 'delete User' + response.firstname + response.lastname : "some thing went wrong",
   });
 });
 const updateUser = asyncHandler(async (req, res) => {
@@ -144,11 +181,12 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 const updateUserAdmin = asyncHandler(async (req, res) => {
   const { uid } = req.params;
+
   if (Object.keys(req.body).length === 0) throw new Error("missing input !!!");
   const response = await User.findByIdAndUpdate(uid, req.body, { new: true }).select("-password -refreshToken -role");
   return res.status(200).json({
     success: response ? true : false,
-    deleteUser: response ? response : "some thing went wrong",
+    mes: response ? 'update thành công User' + '' + response.email : "some thing went wrong",
   });
 });
 //update address
@@ -218,13 +256,17 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
 // resetPassword
 const resetPassword = asyncHandler(async (req, res) => {
+  // const {token} = req.params
   const { password, token } = req.body;
+
+  console.log('2',token, password)
   if (!password && !token) throw new Error("missing password");
   const passwordResetToken = crypto.createHash("sha256").update(token).digest("hex");
   const userData = await User.findOne({
     passwordResetToken,
     passwordResetExpires: { $gt: Date.now() },
   });
+  console.log('1',userData)
   if (!userData) throw new Error("user Token undefined");
   userData.password = password;
   userData.passwordResetToken = undefined;
@@ -352,8 +394,8 @@ const removeItemCart = asyncHandler(async (req, res) => {
   const response = await User.findByIdAndUpdate(_id, { $pull: { cart: { _id: id } } }, { new: true });
 
   return res.status(200).json({
-    result : response ? true : false,
-    data : 1
+    result: response ? true : false,
+    data: 1
   })
 
 })
@@ -373,5 +415,6 @@ module.exports = {
   updateCartProduct,
   createAccount,
   updateQuantityCart,
-  removeItemCart
+  removeItemCart,
+  updateUserAdmin
 };

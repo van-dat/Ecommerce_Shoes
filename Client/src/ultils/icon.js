@@ -23,6 +23,12 @@ import { PiList } from "react-icons/pi";
 import { HiArrowNarrowLeft } from "react-icons/hi";
 import { BsFillTrashFill } from "react-icons/bs";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
+import { BsThreeDots } from "react-icons/bs";
+import { MdKeyboardArrowLeft } from "react-icons/md";
+import { IoIosCloseCircleOutline } from "react-icons/io";
+import { LuEye } from "react-icons/lu";
+import { RiAdminLine } from "react-icons/ri";
+import { LuClipboardEdit } from "react-icons/lu";
 
 
  const icons = {
@@ -54,8 +60,13 @@ import { HiOutlinePencilSquare } from "react-icons/hi2";
     PiList,
     HiArrowNarrowLeft,
     BsFillTrashFill,
-    HiOutlinePencilSquare
-    
+    HiOutlinePencilSquare,
+    BsThreeDots,
+    MdKeyboardArrowLeft,
+    IoIosCloseCircleOutline,
+    LuEye,
+    RiAdminLine,
+    LuClipboardEdit
 
 
 

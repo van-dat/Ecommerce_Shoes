@@ -5,8 +5,6 @@
 @import "~slick-carousel/slick/slick-theme.css";
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&family=Quicksand:wght@300;400;500;600;700&display=swap");
 
-
-        
 body {
   margin: 0;
   font-family: "Quicksand", sans-serif;
@@ -41,8 +39,6 @@ button.slick-prev::before {
   border-radius: 50%;
 }
 
-
-
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -57,7 +53,6 @@ button.slick-prev::before {
 ::-webkit-scrollbar-track {
   background-color: transparent;
   height: 16px;
-
 }
 
 input[type="range"]::-webkit-slider-runnable-track {
@@ -98,36 +93,78 @@ input[type="range"]::-ms-thumb {
   cursor: pointer;
 }
 
-
-
 .checkbox2 {
   accent-color: #de0000;
   border: 1px solid #ddd;
   outline: none;
   color: red;
- 
-  
 }
-input:checked + label{
-  color: #de0000;  
+input:checked + label {
+  color: #de0000;
 }
 input:checked:hover {
   border: 1px solid red;
-
 }
 
 div .react-responsive-modal-modal {
   box-shadow: none;
-} 
+}
 
 ul.slick-dots {
   position: relative;
   bottom: 0;
 }
 
+input[type="text"]:focus,
+input:where(:not([type])):focus,
+[type="email"]:focus,
+[type="url"]:focus,
+[type="password"]:focus,
+[type="number"]:focus,
+[type="date"]:focus,
+[type="datetime-local"]:focus,
+[type="month"]:focus,
+[type="search"]:focus,
+[type="tel"]:focus,
+[type="time"]:focus,
+[type="week"]:focus,
+[multiple]:focus,
+textarea:focus,
+select:focus {
+  outline: 0px solid transparent;
+  outline-offset: 2px;
+  --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: transparent;
+  --tw-ring-offset-shadow: transparent;
+  border-color: #ddd;
+  
+}
+
 /*  */
+input[type="file"]::file-selector-button {
+  margin-right: 20px;
+  border: none;
+   /* background: #084cdf; */
+  background: #33b5e5;
+  padding: 5px 20px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
 
+input[type="file"]::file-selector-button:hover {
+  background: #0d45a5;
+}
 
-
-
-
+input[type="file"] {
+   /* width: 350px; */
+  max-width: 100%;
+  color: #444;
+  padding: 3px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #555;
+}

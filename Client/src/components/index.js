@@ -13,6 +13,9 @@ export { default as NavBarLeft } from "./NavBarLeft";
 export { default as Model } from "./Model";
 export {default as BreadCrumb } from "./BreadCrumb";
 export {default as SelectDetail } from "./SelectDetail";
+export {default as Pagination } from "./Pagination";
+
+
 
 
 

@@ -23,9 +23,9 @@ export const apiForgot = (email) => axios(
     data:email
 })
 
-export const apiResetPass = (data) => axios(
+export const apiResetPass = (data, token) => axios(
     {
-    url :'user/reset-password',
+    url :'user/reset-password/'+token,
     method : 'put',
     data
 })
@@ -62,9 +62,20 @@ export const apiRemoveItemCart = (data) => axios(
     data
     
 })
-export const apiGetAllUser = () => axios(
+export const apiGetAllUser = (params) => axios(
     {
     url :'user',
-    method : 'get'
-    
+    method : 'get',
+    params
+})
+export const apiUpdateAdmin = (data, uid) => axios(
+    {
+    url :'user/update-user-admin/'+uid,
+    method : 'put',
+    data
+})
+export const apiDeleteUser = (uid) => axios(
+    {
+    url :'user/delete/'+uid,
+    method : 'delete',
 })

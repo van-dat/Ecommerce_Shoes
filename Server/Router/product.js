@@ -3,7 +3,7 @@ const Controller = require('../Controller/productController')
 const {verifyAccessToken, isAdmin} = require('../middlewares/verifyToken')
 const Uploader  = require('../Config/cloudinary.config')
 
-router.post('/',[verifyAccessToken, isAdmin],Controller.createProduct)
+router.post('/',[verifyAccessToken, isAdmin],Uploader.fields([{name:'image', maxCount: 10}, {name:'thumbnail', maxCount:1}]),Controller.createProduct)
 router.get('/',Controller.getProducts)
 router.put('/rating',[verifyAccessToken],Controller.rating)
 

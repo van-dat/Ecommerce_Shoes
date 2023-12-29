@@ -31,7 +31,8 @@ module.exports = {
         content: "rgba(245,245,245,1)",
         hover: "rgba(0,0,0,0.7)",
         user: "rgba(255,255,255,0.3)",
-        graydark: '#333A48'
+        graydark: '#333A48',
+        admin: "rgba(241, 245, 249, 1)"
       },
       screens: {
         1600: "1600px",
@@ -84,6 +85,16 @@ module.exports = {
             transform: "scale(1)",
             opacity: 1
           }
+        },
+        "scale-up-center": {
+          "0%":{
+            "-webkit-transform": "scale(0.5);",
+                    transform: "scale(0.5);"
+          },
+         " 100%" :{
+            "-webkit-transform": "scale(1);",
+                    transform: "scale(1);"
+          }
         }
 
 
@@ -94,7 +105,8 @@ module.exports = {
       animation: {
         "slide-top": "slide-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;",
         "zoom-img": "zoom-img 0.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) NaNs infinite both",
-        "user" : "user 1s cubic-bezier(.25,.46,.45,.94) both;animation:scale-in-center .5s cubic-bezier(.25,.46,.45,.94) both"
+        "user": "user 1s cubic-bezier(.25,.46,.45,.94) both;animation:scale-in-center .5s cubic-bezier(.25,.46,.45,.94) both",
+        "zoom":"scale-up-center 0.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;"
       },
       flex: {
         6: "6 6 0%",
@@ -110,5 +122,8 @@ module.exports = {
       padding: "4rem",
     },
   },
-  plugins: [require("@tailwindcss/line-clamp")],
+  plugins: [
+    require("@tailwindcss/line-clamp"),
+    require('@tailwindcss/forms')
+  ],
 };
