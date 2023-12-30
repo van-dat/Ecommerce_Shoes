@@ -22,7 +22,7 @@ const updateCategory = asyncHandler(async (req, res) => {
   const {title, branch} = req.body
   const response = await Category.findByIdAndUpdate(cid, {title, $push :{branch} }, {new: true}).populate("branch");
  
-  return res.status(200).json({
+  return res.status(200).json({ 
     status: response ? true : false,
     rs: response ? response : "can not update category",
   });
