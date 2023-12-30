@@ -10,7 +10,7 @@ const createCategory = asyncHandler(async (req, res) => {
 });
 // getCategory
 const getCategory = asyncHandler(async (req, res) => {
-  const response = await Category.find().select('title _id slug');
+  const response = await Category.find().select('title _id slug').populate("branch");
   return res.status(200).json({
     status: response ? true : false,
     rs: response ? response : "can not find category",
@@ -19,8 +19,9 @@ const getCategory = asyncHandler(async (req, res) => {
 // updateCategory
 const updateCategory = asyncHandler(async (req, res) => {
   const { cid } = req.params;
-
-  const response = await Category.findByIdAndUpdate(cid, req.body, {new: true});
+  const {title, branch} = req.body
+  const response = await Category.findByIdAndUpdate(cid, {title, $push :{branch} }, {new: true}).populate("branch");
+ 
   return res.status(200).json({
     status: response ? true : false,
     rs: response ? response : "can not update category",

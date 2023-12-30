@@ -14,6 +14,10 @@ var productCategorySchema = new mongoose.Schema({
         slug: "title",
         unique:true,
     },
+    branch : [{
+        type: mongoose.Types.ObjectId,
+        ref: "Brand",
+    }],
 },{timestamps: true});
 
 //Export the model
